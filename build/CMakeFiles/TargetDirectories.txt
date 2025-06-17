@@ -1,0 +1,3 @@
+/Users/mihaildechev/Desktop/PROJECTS/RasterGraphics/build/CMakeFiles/raster_graphics.dir
+/Users/mihaildechev/Desktop/PROJECTS/RasterGraphics/build/CMakeFiles/edit_cache.dir
+/Users/mihaildechev/Desktop/PROJECTS/RasterGraphics/build/CMakeFiles/rebuild_cache.dir

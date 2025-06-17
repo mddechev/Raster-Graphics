@@ -1,0 +1,107 @@
+BASIC LIMITATIONS
+RESTRAIN FROM USING SMART POINTERS ON ANY DATA STRUCTURES FROM THE STANDARD LIBRARY EXCEPT VECTOR AND STRING
+If u wish to use other data structures, implement them yourself
+The use of functionality and libraries outside of those declared in the following header files is not allowed:
+<iostream>, <fstream>, <new>, <cstring>, <cmath>, <cstdlib>, <exception>, <stdexcept>, <string>, and <vector>.
+
+Topic #8 Processing of Raster Images
+Within this project, you need to develop an application that represents a console editor for raster images. Your editor should support working with different files, starting sessions, applying various transformations to images, and of course, saving the results.
+At minimum, the application should be able to work with PPM, PGM, PBM files (for more information, see http://en.wikipedia.org/wiki/Netpbm_format).
+It's desirable to implement support for BMP images (at least in the basic profile of the format). For reference: https://en.wikipedia.org/wiki/BMP_file_format.
+You must implement the code for reading/writing the images.
+Creating a User Session
+When starting your application, it initially doesn't have any loaded files for processing or current sessions. To load files into your program, a new session must be started. This action is performed with the load command, followed by paths to the files that should be loaded into the session. This command also generates a sequential session number by which it can later be identified in case of multiple user sessions.
+Example:
+> load image01.ppm image02.pgm
+
+Session with ID: 1 started
+The command starts a session in which the images image01.ppm and image02.pgm will be processed. When transformations are applied in a session, they apply to all loaded images for the current session.
+Converting to Grayscale Image
+Command:
+> grayscale
+The command should be applied to all color images in the current session. If the current session includes grayscale images, they should not be modified. Note that a file can be in a format that supports color images (such as PPM or BMP), but be grayscale, i.e., all pixels in it are black, white, or shades of gray.
+Converting to Monochrome Image
+Command:
+> monochrome
+The behavior of this operation is similar to the previous one, but here the file is converted to monochrome, i.e., one in which there are only black and white pixels, without any shades of gray. Again, if the input file is monochrome, the program does nothing.
+Image Negative
+Command:
+> negative
+This command creates a negative (tonal inversion) of the images in the current session.
+Image Rotation
+Command:
+> rotate left
+or
+> rotate right
+or
+> flip top
+or
+> flip left
+These commands implement rotation and mirroring of an image. Note that four consecutive rotations in one direction are identity, so there's no need to apply them. The same applies to two reflections. There are also other series of transformations, the result of which is identity, and there's no point in applying them.
+Undo Last Transformation
+Command:
+> undo
+The undo command removes the last transformation made in the current session. If a new session is started and then immediately followed by an undo command, it should have no effect.
+Command:
+> redo
+The redo command restores the last transformation canceled with undo in the current session. If there is no canceled transformation or all canceled ones have already been restored, it should have no effect.
+Adding an Image
+Command:
+> add image02.ppm
+Adds a new image to the current session. All transformations applied so far are not applied to it.
+Saving Changes
+Command:
+> save
+To save the applied transformations, you need to implement a save command. It saves the newly created files in the same directory as the original images in the session. The time of their saving is added to the file names. After the save command, you should still be able to perform undo on the applied operations.
+Example:
+> load image01.ppm
+
+Session with ID: 1 started
+
+> grayscale
+> save
+Saves a new file named image01_<modified_time>.ppm in the directory where image01.ppm is located.
+Command:
+> saveas
+To save the applied transformations, you can use the saveas command. It saves the newly created files in the same directory as the original images in the session. Here, the names are provided as parameters to the command and must not exceed the number of images loaded in the session. The first name applies to the first loaded file, the second to the second, and so on. If the provided names are fewer than the files in the session, a default name is used for all those without a provided name (see save).
+Example:
+> load image01.ppm somePic.bmp
+
+Session with ID: 1 started
+
+> grayscale
+> saveas grayfile.ppm changedPic.bmp
+
+Files grayfile.ppm and changePic.bmp successfully saved.
+Information About Current Session
+Command:
+> list session
+The command allows the user to get detailed information about the current user session: its identification number and the images participating in it - their names and formats.
+Example:
+> load image1.ppm image2.pgm image3.bmp
+
+Session with ID: 1 started
+
+> rotate left
+> grayscale
+> session info
+
+Files in session with ID 1:
+image1 - portable pixmap format 
+image2 - portable graymap format
+image3 - 32bit Bitmap
+Embedding Images
+Command:
+> paste image_src image_dest posX posY
+Places the pixels from the image_src image into the image_dest image, starting from position posX posY (top-left corner). The pixels in the target image are replaced with those from the source. If necessary, the target image should be expanded to the required dimensions. Potentially remaining empty pixels should be white.
+Exiting the Program
+Command:
+> exit
+Exiting the graphic editor should be done via the exit command. If there are unsaved transformations, you should ask the user if they want to save them before exiting.
+Example:
+> load image.ppm
+> negative
+> exit
+Session contains unsaved work. Save it now (y/n)?
+> n
+In this case, a new file should not be created and the negative transformation should not be applied because before exit we did not call save and we refused to save when exiting.
