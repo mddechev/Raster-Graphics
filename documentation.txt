@@ -1,7 +1,0 @@
-The project documentation must include:
-
-Task analysis and your approach to the solution (how you broke down the solution into steps, what method or algorithm you chose, how you handled specific problems).
-
-A brief description of the classes created to solve the task (the chosen architecture, description of the member data and member functions of the classes, and how they are used).
-
-Ideas for future improvements.
