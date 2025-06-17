@@ -1,0 +1,10 @@
+build/
+
+
+.cache/
+
+*.object 
+
+main 
+
+**/.DS_Store
